@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InvalidObjectException {
 
         String fileName = "people.dat";
 
@@ -31,6 +31,7 @@ public class Main {
         }
         for (Person person:newPeople){
             System.out.println(person);
+            person.validateObject();
         }
     }
 }

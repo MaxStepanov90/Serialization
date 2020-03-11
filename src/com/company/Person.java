@@ -1,8 +1,8 @@
 package com.company;
 
-import java.io.Serializable;
+import java.io.*;
 
-public class Person implements Serializable {
+public class Person implements Serializable, ObjectInputValidation {
 
     private String name;
     private int age;
@@ -14,6 +14,18 @@ public class Person implements Serializable {
         this.age = age;
         this.height = height;
         this.married = married;
+    }
+
+    // Encrypt
+    private void writeObject(ObjectOutputStream objectOutputStream) throws IOException {
+        age = age >> 2;
+        objectOutputStream.defaultWriteObject();
+    }
+
+    // Decrypt
+    private void readObject(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException {
+        age = age << 2;
+        objectInputStream.defaultReadObject();
     }
 
     public String getName() {
@@ -32,6 +44,22 @@ public class Person implements Serializable {
         return married;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
+    }
+
+    public void setMarried(boolean married) {
+        this.married = married;
+    }
+
     @Override
     public String toString() {
         return "Person{" +
@@ -40,5 +68,13 @@ public class Person implements Serializable {
                 ", height=" + height +
                 ", married=" + married +
                 '}';
+    }
+
+    // Проверка десериализованного объекта
+    @Override
+    public void validateObject() throws InvalidObjectException {
+        if (age < 39 || age > 60) {
+            throw new InvalidObjectException("Invalid age");
+        }
     }
 }
